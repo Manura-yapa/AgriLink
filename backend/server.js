@@ -23,6 +23,19 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Successfully connected to local MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('Successfully connected to local MongoDB'))
+  .catch((err) => console.error('MongoDB connection error:', err));
+
+// Routes
+app.use('/api/auth', require('./routes/auth'));
+
+// Basic Test Route
+app.get('/api/status', (req, res) => {
+    res.json({ message: 'AgriLink MongoDB Backend is running' });
+});
+
 // Basic Test Route
 app.get('/api/status', (req, res) => {
     res.json({ message: 'AgriLink MongoDB Backend is running' });
