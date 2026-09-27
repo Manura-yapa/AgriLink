@@ -11,7 +11,7 @@ function App() {
   });
   const [message, setMessage] = useState('');
   const [token, setToken] = useState(null);
-  const [showPassword, setShowPassword] = useState(false); // Password පෙන්වනවාද නැද්ද යන්න පාලනය කරන state එක
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -53,18 +53,27 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-emerald-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 border border-emerald-100">
+    <div 
+      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat relative"
+      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')" }}
+    >
+      
+      {/* පින්තූරය මතින් ඇති අඳුරු ආවරණය */}
+      <div className="absolute inset-0 bg-emerald-950/40"></div>
+
+      {/* මෙහි bg-emerald-150/95 මඟින් ලා කොළ පැහැය ලබා දී ඇත */}
+      <div className="relative z-10 w-full max-w-md bg-emerald-100/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-emerald-300">
+        
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-extrabold text-emerald-800 tracking-tight">AgriLink</h1>
-          <p className="text-sm text-gray-500 mt-1">Farmer-to-Market Direct Trade Platform</p>
+          <h1 className="text-3xl font-extrabold text-emerald-900 tracking-tight">AgriLink</h1>
+          <p className="text-sm text-emerald-800 mt-1">Farmer-to-Market Direct Trade Platform</p>
         </div>
 
-        <div className="flex border-b border-gray-200 mb-6">
+        <div className="flex border-b border-emerald-300 mb-6">
           <button
             type="button"
             className={`w-1/2 py-2 text-sm font-semibold text-center border-b-2 transition ${
-              isLogin ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-gray-400 hover:text-gray-600'
+              isLogin ? 'border-emerald-700 text-emerald-900' : 'border-transparent text-emerald-700 hover:text-emerald-900'
             }`}
             onClick={() => { setIsLogin(true); setMessage(''); }}
           >
@@ -73,7 +82,7 @@ function App() {
           <button
             type="button"
             className={`w-1/2 py-2 text-sm font-semibold text-center border-b-2 transition ${
-              !isLogin ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-gray-400 hover:text-gray-600'
+              !isLogin ? 'border-emerald-700 text-emerald-900' : 'border-transparent text-emerald-700 hover:text-emerald-900'
             }`}
             onClick={() => { setIsLogin(false); setMessage(''); }}
           >
@@ -85,7 +94,7 @@ function App() {
           {!isLogin && (
             <>
               <div>
-                <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">Full Name</label>
+                <label className="block text-xs font-semibold text-emerald-900 uppercase mb-1">Full Name</label>
                 <input
                   type="text"
                   name="name"
@@ -93,17 +102,17 @@ function App() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="e.g. Kamal Perera"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full px-3 py-2 border border-emerald-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white text-gray-800"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">Account Role</label>
+                <label className="block text-xs font-semibold text-emerald-900 uppercase mb-1">Account Role</label>
                 <select
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white"
+                  className="w-full px-3 py-2 border border-emerald-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white text-gray-800"
                 >
                   <option value="farmer">Farmer (Seller)</option>
                   <option value="buyer">Buyer (Consumer / Wholesaler)</option>
@@ -113,7 +122,7 @@ function App() {
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">Email Address</label>
+            <label className="block text-xs font-semibold text-emerald-900 uppercase mb-1">Email Address</label>
             <input
               type="email"
               name="email"
@@ -121,13 +130,12 @@ function App() {
               value={formData.email}
               onChange={handleChange}
               placeholder="name@agrilink.com"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3 py-2 border border-emerald-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white text-gray-800"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">Password</label>
-            {/* අලුතින් එකතු කළ Show/Hide Password කොටස */}
+            <label className="block text-xs font-semibold text-emerald-900 uppercase mb-1">Password</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -136,21 +144,29 @@ function App() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full px-3 py-2 pr-10 border border-emerald-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white text-gray-800"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-emerald-700 hover:text-emerald-900 focus:outline-none"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
           </div>
 
+          {isLogin && (
+            <div className="flex items-center justify-end -mt-2">
+              <a href="#" className="text-xs font-medium text-emerald-700 hover:text-emerald-900 hover:underline">
+                Forgot your password?
+              </a>
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg text-sm transition shadow-sm hover:shadow"
+            className="w-full py-2.5 px-4 bg-emerald-700 hover:bg-emerald-800 text-white font-medium rounded-lg text-sm transition shadow-sm hover:shadow mt-2"
           >
             {isLogin ? 'Sign In' : 'Create Account'}
           </button>
@@ -158,7 +174,7 @@ function App() {
 
         {message && (
           <div className={`mt-4 p-3 rounded-lg text-xs font-medium text-center ${
-            token ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'
+            token ? 'bg-emerald-200 text-emerald-900' : 'bg-amber-100 text-amber-900'
           }`}>
             {message}
           </div>
