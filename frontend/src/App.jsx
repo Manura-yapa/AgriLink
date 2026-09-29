@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-function App() {
+function Login() {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
@@ -30,37 +32,10 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
-
-    const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
-    const payload = isLogin 
-      ? { email: formData.email, password: formData.password }
-      : formData;
-
-    try {
-      const res = await fetch(`http://localhost:5000${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setMessage(data.message || data.error || 'Something went wrong');
-        return;
-      }
-
-      if (isLogin) {
-        setToken(data.token);
-        setMessage(`Welcome back, ${data.user?.name || 'User'} (${data.user?.role || 'Member'})!`);
-      } else {
-        setMessage('Registration successful! Please sign in.');
-        setIsLogin(true);
-      }
-    } catch (err) {
-      setMessage('Unable to connect to the backend server. Make sure Backend server is running on port 5000.');
-    }
+    
+    // Backend එක නොමැතිව Mock Login කිරීම හරහා Dashboard එකට යැවීම
+    console.log("Mock Login Data:", formData);
+    navigate('/dashboard'); 
   };
 
   return (
@@ -169,7 +144,7 @@ function App() {
 
           {isLogin && (
             <div className="flex items-center justify-end -mt-2">
-              <a href="#" className="text-xs font-medium text-emerald-700 hover:text-emerald-900 hover:underline">
+              <a href="#forgot-password" onClick={(e) => e.preventDefault()} className="text-xs font-medium text-emerald-700 hover:text-emerald-900 hover:underline">
                 Forgot your password?
               </a>
             </div>
@@ -195,4 +170,4 @@ function App() {
   );
 }
 
-export default App;
+export default Login;
