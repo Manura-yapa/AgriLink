@@ -58,10 +58,10 @@ function App() {
       style={{ backgroundImage: "url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')" }}
     >
       
-      {/* පින්තූරය මතින් ඇති අඳුරු ආවරණය */}
+      
       <div className="absolute inset-0 bg-emerald-950/40"></div>
 
-      {/* මෙහි bg-emerald-150/95 මඟින් ලා කොළ පැහැය ලබා දී ඇත */}
+      
       <div className="relative z-10 w-full max-w-md bg-emerald-100/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-emerald-300">
         
         <div className="text-center mb-6">
