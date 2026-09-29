@@ -17,6 +17,17 @@ function App() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const toggleAuthMode = (loginMode) => {
+    setIsLogin(loginMode);
+    setMessage('');
+    setFormData({
+      name: '',
+      email: '',
+      password: '',
+      role: 'buyer'
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
@@ -42,13 +53,13 @@ function App() {
 
       if (isLogin) {
         setToken(data.token);
-        setMessage(`Welcome back, ${data.user.name} (${data.user.role})!`);
+        setMessage(`Welcome back, ${data.user?.name || 'User'} (${data.user?.role || 'Member'})!`);
       } else {
         setMessage('Registration successful! Please sign in.');
         setIsLogin(true);
       }
     } catch (err) {
-      setMessage('Unable to connect to the backend server.');
+      setMessage('Unable to connect to the backend server. Make sure Backend server is running on port 5000.');
     }
   };
 
@@ -57,11 +68,10 @@ function App() {
       className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat relative"
       style={{ backgroundImage: "url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')" }}
     >
-      
-      
+      {/* Background Dark Overlay */}
       <div className="absolute inset-0 bg-emerald-950/40"></div>
 
-      
+      {/* Auth Card */}
       <div className="relative z-10 w-full max-w-md bg-emerald-100/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-emerald-300">
         
         <div className="text-center mb-6">
@@ -69,13 +79,14 @@ function App() {
           <p className="text-sm text-emerald-800 mt-1">Farmer-to-Market Direct Trade Platform</p>
         </div>
 
+        {/* Tab Selection */}
         <div className="flex border-b border-emerald-300 mb-6">
           <button
             type="button"
             className={`w-1/2 py-2 text-sm font-semibold text-center border-b-2 transition ${
               isLogin ? 'border-emerald-700 text-emerald-900' : 'border-transparent text-emerald-700 hover:text-emerald-900'
             }`}
-            onClick={() => { setIsLogin(true); setMessage(''); }}
+            onClick={() => toggleAuthMode(true)}
           >
             Sign In
           </button>
@@ -84,7 +95,7 @@ function App() {
             className={`w-1/2 py-2 text-sm font-semibold text-center border-b-2 transition ${
               !isLogin ? 'border-emerald-700 text-emerald-900' : 'border-transparent text-emerald-700 hover:text-emerald-900'
             }`}
-            onClick={() => { setIsLogin(false); setMessage(''); }}
+            onClick={() => toggleAuthMode(false)}
           >
             Register
           </button>
