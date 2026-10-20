@@ -15,7 +15,7 @@ const mongoose = require('mongoose');
 const app = express();
 
 // Middleware
-app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:5174'], credentials: true }));
+app.use(cors({ origin: ['http://localhost:5173','http://10.50.80.126:5173', 'http://localhost:5174'], credentials: true }));
 app.use(express.json());
 
 // MongoDB Connection
