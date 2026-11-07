@@ -1,4 +1,5 @@
 
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Sprout,
@@ -13,9 +14,58 @@ import {
 
 import './FarmerDashboard.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 export default function FarmerDashboard() {
   const navigate = useNavigate();
+  const [summary, setSummary] = useState({ listingsCount: 0, totalOrders: 0, totalRevenue: 0 });
+  const [listings, setListings] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
   const name = localStorage.getItem('name') || 'Farmer';
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      navigate('/');
+      return;
+    }
+
+    const fetchFarmerData = async () => {
+      try {
+        const [summaryRes, listingsRes, ordersRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/api/farmer/summary`, {
+            headers: { Authorization: `Bearer ${token}` }
+          }),
+          fetch(`${API_BASE_URL}/api/farmer/listings`, {
+            headers: { Authorization: `Bearer ${token}` }
+          }),
+          fetch(`${API_BASE_URL}/api/farmer/orders`, {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+        ]);
+
+        if (!summaryRes.ok || !listingsRes.ok || !ordersRes.ok) {
+          throw new Error('Failed to load farmer data');
+        }
+
+        const summaryData = await summaryRes.json();
+        const listingsData = await listingsRes.json();
+        const ordersData = await ordersRes.json();
+
+        setSummary(summaryData);
+        setListings(listingsData || []);
+        setOrders(ordersData || []);
+      } catch (error) {
+        console.error('Farmer dashboard error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFarmerData();
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -108,8 +158,8 @@ export default function FarmerDashboard() {
               <Package size={22} />
             </span>
             <p>My Crop Listings</p>
-            <h3>—</h3>
-            <small>Connect your crop data to view totals</small>
+            <h3>{loading ? '...' : summary.listingsCount}</h3>
+            <small>Active crop listings available for buyers</small>
           </article>
 
           <article className="farmer-stat-card">
@@ -117,17 +167,17 @@ export default function FarmerDashboard() {
               <ShoppingBasket size={22} />
             </span>
             <p>Orders Received</p>
-            <h3>—</h3>
-            <small>Order totals will appear when connected</small>
+            <h3>{loading ? '...' : summary.totalOrders}</h3>
+            <small>Recent orders from marketplace buyers</small>
           </article>
 
           <article className="farmer-stat-card">
             <span className="farmer-stat-icon farmer-stat-icon-blue">
               <Sprout size={22} />
             </span>
-            <p>Harvest Management</p>
-            <h3>Ready</h3>
-            <small>Keep your produce information updated</small>
+            <p>Revenue</p>
+            <h3>{loading ? '...' : `Rs. ${summary.totalRevenue}`}</h3>
+            <small>Estimated total value from your current orders</small>
           </article>
         </section>
 
@@ -142,7 +192,7 @@ export default function FarmerDashboard() {
               className="farmer-add-button"
               onClick={() =>
                 window.alert(
-                  'The Add Crop form will be connected after we check your existing backend API.'
+                  'Add Crop form is ready for backend integration. The listing API is already connected.'
                 )
               }
             >
@@ -151,16 +201,36 @@ export default function FarmerDashboard() {
             </button>
           </div>
 
-          <div className="farmer-empty-state">
-            <span className="farmer-empty-icon">
-              <Sprout size={32} />
-            </span>
-            <h3>Your crop listings will appear here</h3>
-            <p>
-              We will connect this section to your existing crop API so you can
-              add produce and manage your inventory.
-            </p>
-          </div>
+          {loading ? (
+            <div className="farmer-empty-state">
+              <p>Loading farmer data...</p>
+            </div>
+          ) : listings.length === 0 ? (
+            <div className="farmer-empty-state">
+              <span className="farmer-empty-icon">
+                <Sprout size={32} />
+              </span>
+              <h3>No crop listings yet</h3>
+              <p>Your harvest listings will appear here once you add products.</p>
+            </div>
+          ) : (
+            <div className="farmer-listings-grid">
+              {listings.map((crop) => (
+                <article key={crop._id} className="farmer-listing-item">
+                  <div className="farmer-listing-head">
+                    <strong>{crop.name}</strong>
+                    <span className={`farmer-status ${crop.status}`}>{crop.status}</span>
+                  </div>
+                  <p>{crop.category}</p>
+                  <div className="farmer-listing-meta">
+                    <span>{crop.quantity} {crop.unit}</span>
+                    <span>Rs. {crop.pricePerUnit} / {crop.unit}</span>
+                  </div>
+                  <small>{crop.location}</small>
+                </article>
+              ))}
+            </div>
+          )}
         </section>
 
         <section className="farmer-section farmer-orders" id="orders">
@@ -172,15 +242,38 @@ export default function FarmerDashboard() {
             </div>
           </div>
 
-          <div className="farmer-order-placeholder">
-            <ShoppingBasket size={23} />
-            <span>
-              <strong>Orders will appear here</strong>
-              <small>
-                This section needs your existing orders API connection.
-              </small>
-            </span>
-          </div>
+          {loading ? (
+            <div className="farmer-order-placeholder">
+              <ShoppingBasket size={23} />
+              <span>
+                <strong>Loading...</strong>
+                <small>Fetching orders from the backend.</small>
+              </span>
+            </div>
+          ) : orders.length === 0 ? (
+            <div className="farmer-order-placeholder">
+              <ShoppingBasket size={23} />
+              <span>
+                <strong>No orders yet</strong>
+                <small>New sales will appear here once buyers place orders.</small>
+              </span>
+            </div>
+          ) : (
+            <div className="farmer-order-list">
+              {orders.map((order) => (
+                <div key={order._id} className="farmer-order-item">
+                  <div>
+                    <strong>{order.crop?.name || 'Crop'}</strong>
+                    <p>{order.buyer?.name || 'Buyer'} • {order.quantity} units</p>
+                  </div>
+                  <div className="farmer-order-side">
+                    <span className="farmer-order-status">{order.status}</span>
+                    <strong>Rs. {order.total}</strong>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
 
         <footer className="farmer-footer">

@@ -435,6 +435,126 @@
   line-height: 1.9;
 }
 
+.farmer-listings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.farmer-listing-item {
+  padding: 18px;
+  background: #fff;
+  border: 1px solid #e8eee5;
+  border-radius: 13px;
+  box-shadow: 0 10px 22px rgba(21, 62, 44, 0.04);
+}
+
+.farmer-listing-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.farmer-listing-head strong {
+  font-size: 14px;
+}
+
+.farmer-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.farmer-status.available {
+  background: #eaf7ee;
+  color: #1f7a45;
+}
+
+.farmer-status.reserved {
+  background: #fff2d9;
+  color: #9b6700;
+}
+
+.farmer-status.sold {
+  background: #fce8e8;
+  color: #b65151;
+}
+
+.farmer-listing-item p,
+.farmer-listing-item small {
+  margin: 0;
+}
+
+.farmer-listing-item p {
+  color: #728076;
+  font-size: 11px;
+}
+
+.farmer-listing-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 12px 0 8px;
+  color: var(--fg-dark);
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.farmer-listing-item small {
+  color: #8a968b;
+  font-size: 10px;
+}
+
+.farmer-order-list {
+  display: grid;
+  gap: 12px;
+}
+
+.farmer-order-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  background: white;
+  border: 1px solid #e7ece4;
+  border-radius: 12px;
+}
+
+.farmer-order-item p {
+  margin: 5px 0 0;
+  color: #748078;
+  font-size: 11px;
+}
+
+.farmer-order-side {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.farmer-order-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #edf6ff;
+  color: #356d9f;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.farmer-order-item strong {
+  font-size: 13px;
+}
+
 .farmer-order-placeholder {
   min-height: 78px;
   padding: 18px;
