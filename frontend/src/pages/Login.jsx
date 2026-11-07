@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
@@ -29,7 +31,7 @@ export default function Login() {
       : formData;
 
     try {
-      const res = await fetch(`http://10.50.80.126:5000${endpoint}`, {
+      const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
